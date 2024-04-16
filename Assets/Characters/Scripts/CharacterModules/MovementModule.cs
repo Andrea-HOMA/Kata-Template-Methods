@@ -7,6 +7,7 @@ namespace Characters.Scripts
     {
         private readonly float _movementSpeed;
         private readonly Transform _selfTransform;
+        private const float MovementTolerance = 0.5f;
 
         public MovementModule(float movementSpeed, Transform selfTransform)
         {
@@ -16,9 +17,11 @@ namespace Characters.Scripts
 
         public IEnumerator Move(Vector3 to)
         {
-            while (Vector3.Distance( _selfTransform.position, to) > 0.5f)
+            while (Vector3.Distance( _selfTransform.position, to) > MovementTolerance)
             {
-                _selfTransform.position += (to - _selfTransform.position).normalized * _movementSpeed;
+                var position = _selfTransform.position;
+                position += (to - position).normalized * _movementSpeed;
+                _selfTransform.position = position;
                 yield return null;
             }
         }
